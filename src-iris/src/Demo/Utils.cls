@@ -34,7 +34,7 @@ ClassMethod GetTextFromAudio(filepath As %String) As %SYS.Python [ Language = py
     from faster_whisper import WhisperModel
     import os 
     def transcribe_audio(audio_file) -> str:
-        model_size = "small"
+        model_size = "medium"
         model = WhisperModel(model_size, compute_type="int8")
         trascript=""      
         if os.path.exists(audio_file):
