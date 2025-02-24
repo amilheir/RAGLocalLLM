@@ -1,0 +1,70 @@
+Class Demo.Utils Extends %RegisteredObject
+{
+
+ClassMethod GetChunks(pText As %SYS.Python, pChunkSize As %Integer, pChunkOverlap As %Integer) As %SYS.Python [ Language = python ]
+{
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+    text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size = pChunkSize,
+    chunk_overlap  = pChunkOverlap
+    )
+    docs = text_splitter.split_text(pText)
+
+    return docs
+}
+
+ClassMethod GetTextFromPdf(pdfBinary) As %SYS.Python [ Language = python ]
+{
+    import base64
+    from io import BytesIO
+    from PyPDF2 import PdfReader
+    pdf_bytes = base64.b64decode(pdfBinary)
+    reader = PdfReader(BytesIO(pdf_bytes))
+
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text()
+
+    return text
+}
+
+ClassMethod GetTextFromAudio(filepath As %String) As %SYS.Python [ Language = python ]
+{
+    from faster_whisper import WhisperModel
+    import os 
+    def transcribe_audio(audio_file) -> str:
+        model_size = "small"
+        model = WhisperModel(model_size, compute_type="int8")
+        trascript=""      
+        if os.path.exists(audio_file):
+            segments, info = model.transcribe(audio_file, beam_size=5, vad_filter=True)
+            for segment in segments:
+                trascript = trascript + segment.text
+        return trascript
+
+    text = transcribe_audio(filepath)
+    return text
+}
+
+/*
+ClassMethod GetEmbeddingPy(sentences) As %SYS.Python [ Language = python ]
+{
+    import json
+  
+    # import the package   
+    import sentence_transformers
+        
+    # create the model and form the embeddings
+    #model = sentence_transformers.SentenceTransformer('all-MiniLM-L6-v2')
+    model = sentence_transformers.SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+
+    embeddings = model.encode(sentences)
+
+    # convert the embeddings to a string
+    embeddings_list = [str(embedding.tolist()) for embedding in embeddings]
+    # print(embeddings_list[0])
+    return embeddings_list
+}
+*/
+}

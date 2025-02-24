@@ -1,0 +1,52 @@
+services:
+  iris:
+    build:
+      args:
+        IRIS_IMAGE: ${IRIS_IMAGE}
+        IRIS_TAG: ${IRIS_TAG}
+      context: .
+      dockerfile: ./src-iris/Dockerfile
+      secrets:
+        - iris_pw
+    environment:
+      - ISC_DATA_DIRECTORY=/iris-shared/external
+      - ISC_CPF_MERGE_FILE=/iris-shared/cpf/cpfmerge.cpf
+    volumes:
+      - ./volumes/iris:/iris-shared
+    env_file: .env
+    ports:
+      - "51972:1972"
+      - "52773:52773"
+    #command: --key /iris-shared/iris.key
+  streamlit:
+    build:
+      context: ./src-streamlit
+    secrets:
+      - iris_pw
+    ports:
+      - "${STREAMLIT_PORT}:8501"
+    links:
+      - iris
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - ./volumes/ollama:/root/.ollama
+  #  webgateway:
+  #    image: ${WG_IMAGE}:${WG_IMAGE_TAG}
+  #    secrets:
+  #      - iris_pw
+  #    ports:
+  #      - "${WEBSERVER_PORT}:80"
+  #    environment:
+  #      - ISC_DATA_DIRECTORY=/webgateway-shared
+  #      - ISC_CSP_CONF_FILE=/webgateway-shared/CSP.conf
+  #      - ISC_CSP_INI_FILE=/webgateway-shared/CSP.ini
+  #    volumes:
+  #      - ./volumes/webgateway:/webgateway-shared
+  #    env_file: .env
+secrets:
+  iris_pw:
+    file: "./src-iris/irispw.txt"

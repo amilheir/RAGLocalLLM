@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "raglocal:RAG",
+			"uri": "isfs://raglocal:rag/"
+		}
+	],
+	"settings": {}
+}

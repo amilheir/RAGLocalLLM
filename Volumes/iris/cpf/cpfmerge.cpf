@@ -1,0 +1,2 @@
+[Actions]
+CreateApplication:Name=/rag,NameSpace=RAG,DispatchClass=Demo.Service.ApiModule,AutheEnabled=48
