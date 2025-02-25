@@ -15,4 +15,4 @@ RAG
  3. Submit file or type the new text to vectorize
  
  Alternatively, submit Audio File to vectorize:
- - Copy audio file to the `./volumes/ImportAudio/Input` folder or send it on the Swagger through API
+ - Copy audio file to the `./volumes/Input` folder or send it on the Swagger through API
