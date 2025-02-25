@@ -3,6 +3,30 @@ Class Demo.Service.CheckAudioFile Extends Ens.BusinessService
 
 Parameter ADAPTER = "EnsLib.File.InboundAdapter";
 
+ClassMethod OnProductionStart() As %Status
+{
+    Set tSC = $$$OK
+
+    Set tFilePath = "/iris-shared/Input/"
+    If '##class(%File).DirectoryExists(tFilePath)
+    {
+        Do ##class(%File).CreateDirectory(tFilePath) 
+        $$$TRACE("Created directory Input.")
+    }Else{
+        $$$TRACE("Could not create directory Input.")
+    }
+    
+    Set tFilePath = "/iris-shared/Archieve/"
+    If '##class(%File).DirectoryExists(tFilePath)
+    {
+        Do ##class(%File).CreateDirectory(tFilePath) 
+        $$$TRACE("Created directory Archieve.")
+    }Else{
+        $$$TRACE("Could not create directory Archieve.")
+    }
+    Quit tSC
+}
+
 Method OnProcessInput(pInput As %Stream.Object, Output pOutput As %RegisteredObject) As %Status
 {
     Set tSC = $$$OK
