@@ -17,9 +17,11 @@ RAG
  Alternatively, submit Audio File to vectorize:
  - Copy audio file to the `./volumes/Input` folder or send it on the Swagger through API
 
-
-* macOS
+**macOS
  Docker Desktop does not currently support GPU acceleration on Mac.
- https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image
+
+  https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image
+
  On this case for a better performance it is recommended for MacOS users to run Ollama as a standalone application outside of Docker container.
+
   https://ollama.com/download/mac
