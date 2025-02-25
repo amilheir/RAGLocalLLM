@@ -23,8 +23,8 @@ XData ProductionDefinition
     <Setting Target="Host" Name="TargetConfigName">LLM Process Local</Setting>
   </Item>
   <Item Name="Start Audio Import" Category="" ClassName="Demo.Service.CheckAudioFile" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="ArchivePath">/iris-shared/ImportAudio/Archieve/</Setting>
-    <Setting Target="Adapter" Name="FilePath">/iris-shared/ImportAudio/Input/</Setting>
+    <Setting Target="Adapter" Name="ArchivePath">/iris-shared/Archieve/</Setting>
+    <Setting Target="Adapter" Name="FilePath">/iris-shared/Input/</Setting>
   </Item>
   <Item Name="LLM Operation" Category="" ClassName="Demo.Operations.LlmLocal.APIOperation" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="true" Schedule="">
     <Setting Target="Host" Name="Model">smollm2:1.7b</Setting>
