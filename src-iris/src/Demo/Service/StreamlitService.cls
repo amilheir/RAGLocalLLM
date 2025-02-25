@@ -80,18 +80,6 @@ Method SubmitPDF(payload As %Stream.GlobalBinary) As %Stream.GlobalCharacter [ W
     Quit resp
 }
 
-Method SubmitAudio(AudioPath As %String) As %Stream.GlobalCharacter [ WebMethod ]
-{
-    Set tResponse = $ZCONVERT(AudioPath,"I","UTF8")
-    Set Response = ##class(Demo.Utils).GetTextFromAudio(tResponse)
-    Set resp = ##class(%Stream.GlobalCharacter).%New()
-    Do resp.Write(Response)
-    Set tRequest = ##class(Demo.Operations.Embedding.EmbeddingRequest).%New()
-    Set tRequest.Pdf = ..SaveContent(resp)
-    Set tSC = ..SendRequestAsync("Embedding Operation", tRequest)
-    Quit resp
-}
-
 /// Return an array of connections for drawing lines on the config diagram
 ClassMethod OnGetConnections(Output pArray As %String, pItem As Ens.Config.Item)
 {
