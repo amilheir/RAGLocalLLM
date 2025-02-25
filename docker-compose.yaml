@@ -17,7 +17,6 @@ services:
     ports:
       - "51972:1972"
       - "52773:52773"
-    #command: --key /iris-shared/iris.key
   streamlit:
     build:
       context: ./src-streamlit
@@ -27,26 +26,12 @@ services:
       - "${STREAMLIT_PORT}:8501"
     links:
       - iris
-
   ollama:
     image: ollama/ollama:latest
     ports:
       - 11434:11434
     volumes:
       - ./volumes/ollama:/root/.ollama
-  #  webgateway:
-  #    image: ${WG_IMAGE}:${WG_IMAGE_TAG}
-  #    secrets:
-  #      - iris_pw
-  #    ports:
-  #      - "${WEBSERVER_PORT}:80"
-  #    environment:
-  #      - ISC_DATA_DIRECTORY=/webgateway-shared
-  #      - ISC_CSP_CONF_FILE=/webgateway-shared/CSP.conf
-  #      - ISC_CSP_INI_FILE=/webgateway-shared/CSP.ini
-  #    volumes:
-  #      - ./volumes/webgateway:/webgateway-shared
-  #    env_file: .env
 secrets:
   iris_pw:
     file: "./src-iris/irispw.txt"
