@@ -9,12 +9,12 @@
  8. Open Streamlit (Chat interface): http://localhost:8051/
 
 RAG
- Submit PDF/audio file or text content for context:
+ Submit PDF or text content to vectorize and use as context:
  1. Open SwaggerUI
  2. Select /SubmitContent or /SubmitPDF
  3. Submit file or type the new text to vectorize
  
- Alternatively, submit Audio File to vectorize:
+ Alternatively, submit Audio File to vectorize and use as context:
  - Copy audio file to the `./volumes/Input` folder or send it on the Swagger through API
 
 macOS*
