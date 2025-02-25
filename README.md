@@ -1,4 +1,4 @@
-# IRIS RAG LocalLLM Demo 🤖
+# 🤖 IRIS RAG LocalLLM Demo 
  1. Clone or download this repostory to your local machine
  2. Edit the front-end port in `.env` (optional)
  3. Change IRIS password in `./src-iris/irispw.txt` (optional, default: SYS)
