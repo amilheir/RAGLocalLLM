@@ -2,11 +2,10 @@
  1. Clone or download this repostory to your local machine
  2. Edit the front-end port in `.env` (optional)
  3. Change IRIS password in `./src-iris/irispw.txt` (optional, default: SYS)
- 4. Build the container images: `docker-compose build` (macOS: `docker-compose -f docker-compose-arm.yaml build`)
- 5. Create and run containers: `docker-compose up -d`
- 6. Open IRIS managementportal: http://localhost:52773/csp/sys/UtilHome.csp
- 7. Open SwaggerUI (APIs): http://localhost:52773/swagger-ui/index.html?url=http://localhost:52773/rag/_spec
- 8. Open Streamlit (Chat interface): http://localhost:8051/
+ 4. Create and run containers: `docker-compose up -d` (macOS: `docker-compose -f docker-compose-arm.yaml up -d`)
+ 5. Open IRIS managementportal: http://localhost:52773/csp/sys/UtilHome.csp
+ 6. Open SwaggerUI (APIs): http://localhost:52773/swagger-ui/index.html?url=http://localhost:52773/rag/_spec
+ 7. Open Streamlit (Chat interface): http://localhost:8051/
 
 RAG
  Submit PDF or text content to vectorize and use as context:
