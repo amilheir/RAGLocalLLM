@@ -32,7 +32,7 @@ XData ProductionDefinition
     <Setting Target="Host" Name="NumPredict">100</Setting>
     <Setting Target="Host" Name="TopK">10</Setting>
     <Setting Target="Host" Name="TopP">0.5</Setting>
-    <Setting Target="Host" Name="Temperature">0.8</Setting>
+    <Setting Target="Host" Name="Temperature">0.3</Setting>
   </Item>
   <Item Name="LLM Process Local" Category="" ClassName="Demo.Processes.LLMProcessLocal" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
   </Item>
