@@ -86,18 +86,66 @@ st.markdown(f"""
 
 USER_AVATAR = "🧑‍💼"
 BOT_AVATAR = "🤖"
-model_size = "medium"
-model = WhisperModel(model_size, device='cpu', compute_type="int8")
-file_name = "recorded_audio.wav"
+file_name = "recorded_audio.wav" 
 
+
+@st.fragment
 def transcribe_audio():
-    text=""      
+    text=""
+    model_size = "small"
+    model = WhisperModel(model_size, device='cpu', compute_type="int8")     
     if os.path.exists(file_name):
-        segments, info = model.transcribe("recorded_audio.wav", language='en', beam_size=5, vad_filter=False, initial_prompt="This is a demo from InterSystems.")
+        segments, info = model.transcribe("recorded_audio.wav", language='en', beam_size=5, vad_filter=False, initial_prompt="This is a demo from InterSystems with Roche company.")
         for segment in segments:
             text = text + segment.text
         os.remove(file_name)
     return text
+
+@st.fragment
+def text_message(submit_button):
+    if submit_button:
+        text_message = None
+        if text_input:
+            text_message = text_input
+            # Add user's message to history
+            st.session_state.messages.append({"role": "User", "content": text_message})
+            # Generate bot's response
+            with st.spinner("LLM is processing..."):
+                start_time = time.time()
+                bot_response = get_llm_response(text_message)
+                elapsed_time = time.time() - start_time
+                st.write(f"\n Response generated in {int(elapsed_time)} s.")
+            # Add bot's response to history
+            st.session_state.messages.append({"role": "Bot", "content": bot_response})
+            # Clear input components by re-rendering the form
+            st.rerun()
+        else:
+            st.warning("Please provide a text input.")
+    return
+
+@st.fragment
+def audio_message(submit_button2):
+    if submit_button2:
+        audio_message = None
+        if audio_value:
+            with st.spinner("Transcribing audio..."):
+                audio_message = transcribe_audio()
+        if audio_message:
+            # Add user's message to history
+            st.session_state.messages.append({"role": "User", "content": audio_message})
+            # Generate bot's response
+            with st.spinner("LLM is processing..."):
+                start_time = time.time()
+                bot_response = get_llm_response(audio_message)
+                elapsed_time = time.time() - start_time
+                st.write(f"\n Response generated in {int(elapsed_time)} s.")
+            # Add bot's response to history
+            st.session_state.messages.append({"role": "Bot", "content": bot_response})
+            # Clear input components by re-rendering the form
+            st.rerun()
+        else:
+            st.warning("Please provide an audio recording.")
+
 
 
 with st.container(height=340,border=True):   
@@ -119,27 +167,8 @@ with row1[0]:
         with row01[1]:
             submit_button = st.form_submit_button(label="Submit", use_container_width=True)
      
-# Process input and get response when Submit is clicked
-    if submit_button:
-        text_message = None
-        if text_input:
-            text_message = text_input
-            # Add user's message to history
-            st.session_state.messages.append({"role": "User", "content": text_message})
-            # Generate bot's response
-            with st.spinner("LLM is processing..."):
-                start_time = time.time()
-                bot_response = get_llm_response(text_message)
-                elapsed_time = time.time() - start_time
-                st.write(f"\n Response generated in {int(elapsed_time)} s.")
-            # Add bot's response to history
-            st.session_state.messages.append({"role": "Bot", "content": bot_response})
-            # Clear input components by re-rendering the form
-            st.rerun()
-        else:
-            st.warning("Please provide a text input.")
+text_message(submit_button)
         
-
 with row1[1]:
     with st.container(height=230, border=False):
         with st.form(key="input_form2", clear_on_submit=True, border=False):
@@ -153,23 +182,4 @@ with row1[1]:
                 with row1[1]:
                     submit_button2 = st.form_submit_button(label="Submit", use_container_width=True)
                     
-    if submit_button2:
-        audio_message = None
-        if audio_value:
-            with st.spinner("Transcribing audio..."):
-                audio_message = transcribe_audio()
-        if audio_message:
-            # Add user's message to history
-            st.session_state.messages.append({"role": "User", "content": audio_message})
-            # Generate bot's response
-            with st.spinner("LLM is processing..."):
-                start_time = time.time()
-                bot_response = get_llm_response(audio_message)
-                elapsed_time = time.time() - start_time
-                st.write(f"\n Response generated in {int(elapsed_time)} s.")
-            # Add bot's response to history
-            st.session_state.messages.append({"role": "Bot", "content": bot_response})
-            # Clear input components by re-rendering the form
-            st.rerun()
-        else:
-            st.warning("Please provide an audio recording.")
+audio_message(submit_button2)
