@@ -17,16 +17,16 @@ Property Port As %String(MAXLEN = 5) [ InitialExpression = "11434" ];
 Property ChatBotInstructions As %String(MAXLEN = 256) [ InitialExpression = "You are a helpful assistant that answer questions based on a Context." ];
 
 /// Maximum number of tokens to predict when generating text. (Default: -1, infinite generation)
-Property NumPredict As %Integer [ InitialExpression = 200 ];
+Property NumPredict As %Integer [ InitialExpression = 100 ];
 
 /// Reduces the probability of generating nonsense. A higher value (e.g. 100) will give more diverse answers, while a lower value (e.g. 10) will be more conservative. (Default: 40)
-Property TopK As %Integer [ InitialExpression = 40 ];
+Property TopK As %Integer [ InitialExpression = 10 ];
 
 /// Works together with top-k. A higher value (e.g., 0.95) will lead to more diverse text, while a lower value (e.g., 0.5) will generate more focused and conservative text. (Default: 0.9)
-Property TopP As %Float [ InitialExpression = 0.9 ];
+Property TopP As %Float [ InitialExpression = 0.5 ];
 
 /// The temperature of the model. Increasing the temperature will make the model answer more creatively. (Default: 0.8)
-Property Temperature As %Float [ InitialExpression = 0.8 ];
+Property Temperature As %Float [ InitialExpression = 0.3 ];
 
 XData MessageMap
 {
