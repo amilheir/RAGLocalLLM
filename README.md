@@ -12,8 +12,8 @@ RAG
  1. Open SwaggerUI
  2. Select /SubmitContent or /SubmitPDF
  3. Submit file or type the new text contet to vectorize
- 4. In the Demo.RecordEmbeddings is possible to check the vectors created for each text.
- 5. (optional) It is possible to change LLM model, settings or intructions to use for the LLM model, in the Production > LLM Operation.
+ 4. In the Demo.RecordEmbeddings is possible to check the vectors created for each text. 
+ 5. It is possible to change model, settings or intructions to use for the LLM model, in the Production > LLM Operation. (optional) 
  6. Open Streamlit and just start asking about the content submited.
  
  Alternatively, submit Audio File to vectorize and use as context:
