@@ -11,10 +11,13 @@ RAG
  Submit PDF or text content to vectorize and use as context:
  1. Open SwaggerUI
  2. Select /SubmitContent or /SubmitPDF
- 3. Submit file or type the new text to vectorize
+ 3. Submit file or type the new text contet to vectorize
+ 4. In the Demo.RecordEmbeddings is possible to check the vectors created for each text.
+ 5. (optional) It is possible to change LLM model, settings or intructions to use for the LLM model, in the Production > LLM Operation.
+ 6. Open Streamlit and just start asking about the content submited.
  
  Alternatively, submit Audio File to vectorize and use as context:
- - Copy audio file to the `./volumes/Input` folder or send it on the Swagger through API
+ - Copy audio file to the `./volumes/Input` folder.
 
 macOS*
  - Docker Desktop does not currently support GPU acceleration on Mac.
