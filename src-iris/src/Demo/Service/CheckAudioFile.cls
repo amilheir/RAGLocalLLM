@@ -12,17 +12,12 @@ ClassMethod OnProductionStart() As %Status
     {
         Do ##class(%File).CreateDirectory(tFilePath) 
         $$$TRACE("Created directory Input.")
-    }Else{
-        $$$TRACE("Could not create directory Input.")
     }
-    
     Set tFilePath = "/iris-shared/Archieve/"
     If '##class(%File).DirectoryExists(tFilePath)
     {
         Do ##class(%File).CreateDirectory(tFilePath) 
         $$$TRACE("Created directory Archieve.")
-    }Else{
-        $$$TRACE("Could not create directory Archieve.")
     }
     Quit tSC
 }
