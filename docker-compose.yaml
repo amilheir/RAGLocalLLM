@@ -32,6 +32,13 @@ services:
       - 11434:11434
     volumes:
       - ./volumes/ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 secrets:
   iris_pw:
     file: "./src-iris/irispw.txt"
