@@ -35,7 +35,7 @@ ClassMethod GetTextFromAudio(filepath As %String) As %SYS.Python [ Language = py
     import os 
     def transcribe_audio(audio_file) -> str:
         model_size = "medium"
-        model = WhisperModel(model_size, compute_type="int8")
+        model = WhisperModel(model_size, device="cuda", compute_type="float16")
         trascript=""      
         if os.path.exists(audio_file):
             segments, info = model.transcribe(audio_file, beam_size=5, vad_filter=True)
@@ -47,24 +47,14 @@ ClassMethod GetTextFromAudio(filepath As %String) As %SYS.Python [ Language = py
     return text
 }
 
-/*
-ClassMethod GetEmbeddingPy(sentences) As %SYS.Python [ Language = python ]
+ClassMethod GetCleanTxt(text) As %String [ Language = python ]
 {
-    import json
-  
-    # import the package   
-    import sentence_transformers
-        
-    # create the model and form the embeddings
-    #model = sentence_transformers.SentenceTransformer('all-MiniLM-L6-v2')
-    model = sentence_transformers.SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
-
-    embeddings = model.encode(sentences)
-
-    # convert the embeddings to a string
-    embeddings_list = [str(embedding.tolist()) for embedding in embeddings]
-    # print(embeddings_list[0])
-    return embeddings_list
+    
+    import re
+    clean_text = re.sub('\n', ' ', text)  # Remove new lines
+    clean_text = re.sub(' +', ' ', clean_text)  # Remove extra spaces
+    clean_text = re.sub(r"[^a-zA-Z0-9.,;:?!\/\-% áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇ]", "", clean_text)
+    return clean_text
 }
-*/
+
 }

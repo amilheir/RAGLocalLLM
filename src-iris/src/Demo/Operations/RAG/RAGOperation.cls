@@ -12,7 +12,8 @@ Method OnRAG(pRequest As Demo.GenerateRequest, pResponse As Demo.Operations.RAG.
     Try {
       Set tBuiltins = ##class(%SYS.Python).Builtins()
       Set tList = tBuiltins.list()
-      Set tPrompt = pRequest.Prompt
+      Set tAsk = pRequest.Prompt
+      Set tPrompt = ##class(Demo.Utils).GetCleanTxt(tAsk)
       Set tStatement = ##class(%SQL.Statement).%New()
       Set tSql = "SELECT TOP "_..NumberOfRetrivals_" ID FROM Demo.RecordEmbeddings ORDER BY VECTOR_DOT_PRODUCT(Embedding, EMBEDDING(?)) DESC"
       Set rList = ##class(%SQL.Statement).%ExecDirect(, tSql, tPrompt)

@@ -7,10 +7,10 @@ Method OnPrompt(pRequest As Demo.Operations.Prompt.PromptRequest, pResponse As D
     Try {
       Set tDoclist = $LISTFROMSTRING(pRequest.DocIds,",")
       Set pResponse = ##class(Demo.Operations.Prompt.PromptResponse).%New()
-      Set tContextString = "Context:"
+      Set tContextString = "Context: "_$CHAR(10)
       For i=2:1:$LISTLENGTH(tDoclist) {
           Set tDoc = ##class(Demo.RecordEmbeddings).%OpenId($LIST(tDoclist, i))
-          Set tContextString = tContextString _ " " _ tDoc.Text
+          Set tContextString = tContextString_i_" - " _ tDoc.Text_$CHAR(10)
       }
       Set tPromptString = "Prompt: " _ pRequest.Prompt
       Set tPrompt = tContextString _ " " _ tPromptString

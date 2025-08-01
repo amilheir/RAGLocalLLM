@@ -4,9 +4,13 @@
 			"path": "."
 		},
 		{
-			"name": "raglocal:RAG",
-			"uri": "isfs://raglocal:rag/"
+			"name": "rag:RAG",
+			"uri": "isfs://rag:rag/"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"objectscript.conn": {
+			"active": false
+		}
+	}
 }

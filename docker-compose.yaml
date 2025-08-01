@@ -15,8 +15,15 @@ services:
       - ./volumes/iris:/iris-shared
     env_file: .env
     ports:
-      - "51972:1972"
-      - "52773:52773"
+      - "${IRIS_SPORT}:1972"
+      - "${IRIS_PORT}:52773"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
   streamlit:
     build:
       context: ./src-streamlit
@@ -29,7 +36,7 @@ services:
   ollama:
     image: ollama/ollama:latest
     ports:
-      - 11434:11434
+      - ${OLLAMA_PORT}:11434
     volumes:
       - ./volumes/ollama:/root/.ollama
     deploy:

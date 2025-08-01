@@ -17,11 +17,11 @@ Method OnGetEmbeddings(pRequest As Demo.Operations.Embedding.EmbeddingRequest, p
         Set tId = pRequest.Pdf
         Set tPdf = ##class(Demo.PDFRecord).%OpenId(tId)
         Set tChunks = ##class(Demo.Utils).GetChunks(tPdf.Text, ..ChunkSize, ..ChunkOverlap)         
-        // set tVectors = ##class(Demo.Utils).GetEmbeddingPy(tChunks)
         For i=0:1:(tChunks."__len__"()-1) {
             Set tChunk = tChunks."__getitem__"(i)
+            Set tCleanChunk = ##class(Demo.Utils).GetCleanTxt(tChunk) 
             Set tRecordId = i
-            &sql(INSERT INTO Demo.RecordEmbeddings (DataSourceId,SourceId,Text) VALUES (:tId,:tRecordId,:tChunk))
+            &sql(INSERT INTO Demo.RecordEmbeddings (DataSourceId,SourceId,Text,CleanText) VALUES (:tId,:tRecordId,:tChunk,:tCleanChunk))
         }
         Set pResponse = ##class(Demo.Operations.Embedding.EmbeddingResponse).%New()
         Set pResponse.NumberEmbeddings = tChunks."__len__"()
@@ -30,7 +30,7 @@ Method OnGetEmbeddings(pRequest As Demo.Operations.Embedding.EmbeddingRequest, p
         Set tSc = tEx.AsStatus()
     }
     
-    Return tSc
+    Quit tSc
 }
 
 XData MessageMap

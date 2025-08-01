@@ -8,7 +8,7 @@ zpm "enable -community"
 zpm "install iris-apipub"
 zpm "install swagger-ui"
 DO $SYSTEM.SQL.Shell()
-INSERT INTO %Embedding.Config (Name, Configuration, EmbeddingClass, Description) VALUES ('sentence-transformer-config1', '{"hfCachePath":"/usr/irissys/iriscache/hfcache", "modelName":"sentence-transformers/all-MiniLM-L12-v2"}', '%Embedding.SentenceTransformers','sentence-transformers/all-MiniLM-L12-v2')
+INSERT INTO %Embedding.Config (Name, Configuration, EmbeddingClass, Description) VALUES ('multilingual-e5-large-instruct', '{"hfCachePath":"/usr/irissys/iriscache/hfcache", "modelName":"intfloat/multilingual-e5-large-instruct"}', '%Embedding.SentenceTransformers', 'multilingual 512 chunk size')
 QUIT
 do $System.OBJ.LoadDir("/opt/irisbuild/src","cuk",,1)
 do ##class(Ens.Director).SetAutoStart("Demo.DemoProduction",1)
