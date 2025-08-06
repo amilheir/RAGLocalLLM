@@ -11,6 +11,7 @@ services:
     environment:
       - ISC_DATA_DIRECTORY=/iris-shared/external
       - ISC_CPF_MERGE_FILE=/iris-shared/cpf/cpfmerge.cpf
+        - gpus=all
     volumes:
       - ./volumes/iris:/iris-shared
     env_file: .env
@@ -38,7 +39,9 @@ services:
     ports:
       - ${OLLAMA_PORT}:11434
     volumes:
-      - ./volumes/ollama:/root/.ollama
+      - ollama:/root/.ollama # this solution synchronizes with the docker volume and loads the model rocket fast
+    environment:
+      - gpus=all
     deploy:
       resources:
         reservations:
@@ -49,3 +52,6 @@ services:
 secrets:
   iris_pw:
     file: "./src-iris/irispw.txt"
+
+volumes:
+      ollama:
