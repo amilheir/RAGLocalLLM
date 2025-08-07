@@ -6,3 +6,4 @@ sentence-transformers==3.0.1
 tiktoken==0.7.0
 httpx==0.27.0
 faster_whisper==1.1
+ollama==0.5.2
