@@ -8,7 +8,7 @@ Parameter INVOCATION = "Queue";
 Parameter SETTINGS = "Model:LLM Local,Host:LLM Local,Port:LLM Local,ChatBotInstructions:LLM Local, NumPredict:LLM Local,TopK:LLM Local,TopP:LLM Local,Temperature:LLM Local";
 
 /// Model used in operation.
-Property Model As %String(VALUELIST = ",smollm2:1.7b,llama3.2:3b,llama3:8b,gemma3n:e4b,gemma3:4b,gemma3:12b,qwen2.5:3b,qwen2.5:7b,mistral:7b") [ InitialExpression = "mistral:7b" ];
+Property Model As %String(VALUELIST = ",smollm2:1.7b,llama3.2:3b,phi4-mini:3.8b,gemma3n:e4b,gemma3:4b,qwen3:4b,qwen3:8b,mistral:7b,llama3.1:8b") [ InitialExpression = "llama3.2:3b" ];
 
 Property Host As %String(MAXLEN = 256) [ InitialExpression = "host.docker.internal" ];
 
