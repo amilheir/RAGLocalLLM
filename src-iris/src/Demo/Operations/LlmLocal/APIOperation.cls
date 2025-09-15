@@ -54,37 +54,44 @@ Method OnGenerateRequest(pRequest As Demo.GenerateRequest, Output pResponse As D
 
 Method GenerateRequest(pRequest As Demo.GenerateRequest) As %String [ Language = python ]
 {
-    import ollama
+    import requests
     import json
-    import yfinance as yf
-    from typing import Dict, Any, Callable
 
     url = "http://"+self.Host+":"+self.Port
-    
-    client = ollama.Client(
-            host='http://host.docker.internal:11434'
-        )
+    urlR =  url+"/api/tags"
+    models =  requests.get(urlR)
 
-    if self.Model not in client.list().__str__():
-        status = client.pull(model)
+    if self.Model not in models.text:
+        urlR =  url+"/api/pull"
+        request = {
+                    "model": self.Model
+                }
+        status =  requests.post(urlR, json=request)
         self.Trace("Pull Response: " + str(status))
-    
 
-    response = client.chat(
-        self.Model,
-        messages=[{"role": "assistant", "content": self.ChatBotInstructions}, {"role": "user", "content": pRequest.Prompt}],
-        options={
-            'temperature': self.Temperature,
-            'mirostat': 2,
-            'num_predict': self.NumPredict,
-            'top_k': self.TopK,
-            'top_p': self.TopP
+    urlR = url+"/api/chat"
+    request = {
+
+        "model": self.Model,
+        "messages": [
+            {"role": "assistant", "content": self.ChatBotInstructions},
+
+            {"role": "user", "content": pRequest.Prompt}],
+        "stream": False,
+        "options": {
+            "temperature": self.Temperature,
+            "mirostat": 2, 
+            "num_predict": self.NumPredict, 
+            "top_k": self.TopK, 
+            "top_p": self.TopP
         }
-    )
+    } 
 
-    self.Trace("API Response: " + response.__str__())
-    
-    output = response['message']['content']
+    self.Trace("API Request: " + str(request))
+    response =  requests.post(urlR, json=request)
+    self.Trace("API Response: " + response.text)
+    responseObj = json.loads(response.text)
+    output = responseObj['message']['content']
 
     return output
 }
