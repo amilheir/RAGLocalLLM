@@ -1,2 +1,2 @@
 [Actions]
-CreateApplication:Name=/rag,NameSpace=RAG,DispatchClass=Demo.Service.ApiModule,AutheEnabled=48
+CreateApplication:Name=/rag,NameSpace=RAG,DispatchClass=Demo.Service.ApiModule,AutheEnabled=$$$AutheUnauthenticated,MatchRoles=":%DB_RAG",CorsAllowlist="*",CorsHeadersList="*"
