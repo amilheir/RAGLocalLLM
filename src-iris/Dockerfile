@@ -6,7 +6,7 @@ COPY --chown="${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP}" ./src-iris /opt/i
 
 RUN mkdir -p /usr/irissys/iriscache/hfcache
 
-RUN pip install --no-warn-script-location --break-system-packages -r /opt/irisbuild/requirements_iris.txt
+RUN pip install --target /usr/irissys/mgr/python --no-warn-script-location --break-system-packages -r /opt/irisbuild/requirements_iris.txt 
 
 RUN iris start IRIS \
     && iris session IRIS < /opt/irisbuild/iris.script \
