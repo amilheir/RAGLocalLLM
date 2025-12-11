@@ -20,11 +20,9 @@ Method OnRAG(pRequest As Demo.GenerateRequest, pResponse As Demo.Operations.RAG.
       Set tStatement = ##class(%SQL.Statement).%New()
       Set tEmbdding= ..EmbeddingPy(tPrompt)
       Set tcolumn = "Embedding"
-      $$$TRACE(tEmbdding)
       Set tSql = "SELECT TOP "_..NumberOfRetrivals_" ID FROM Demo.RecordEmbeddings ORDER BY VECTOR_DOT_PRODUCT("_tcolumn_" , TO_VECTOR('"_tEmbdding_"', FLOAT)) DESC"
       $$$TRACE(tSql)
       Set rList = ..Query(tSql)
-      $$$TRACE(rList)
       Set pResponse = ##class(Demo.Operations.RAG.RAGResponse).%New()
       Set pResponse.DocIds = rList
       Set pResponse.DocCount = ..NumberOfRetrivals
