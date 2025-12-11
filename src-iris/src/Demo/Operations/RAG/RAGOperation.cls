@@ -18,16 +18,16 @@ Method OnRAG(pRequest As Demo.GenerateRequest, pResponse As Demo.Operations.RAG.
       Set tAsk = pRequest.Prompt
       Set tPrompt = ##class(Demo.Utils).GetCleanTxt(tAsk)
       Set tStatement = ##class(%SQL.Statement).%New()
-      Set tEmbdding= ..EmbeddingPy(tquery)
+      Set tEmbdding= ..EmbeddingPy(tPrompt)
+      Set tcolumn = "Embedding"
       $$$TRACE(tEmbdding)
       Set tSql = "SELECT TOP "_..NumberOfRetrivals_" ID FROM Demo.RecordEmbeddings ORDER BY VECTOR_DOT_PRODUCT("_tcolumn_" , TO_VECTOR('"_tEmbdding_"', FLOAT)) DESC"
       $$$TRACE(tSql)
       Set rList = ..Query(tSql)
-
+      $$$TRACE(rList)
       Set pResponse = ##class(Demo.Operations.RAG.RAGResponse).%New()
       Set pResponse.DocIds = rList
       Set pResponse.DocCount = ..NumberOfRetrivals
-      Set pResponse.Column = tcolumn
     } Catch ex {
         Set tSc = ex.AsStatus()
     }
@@ -43,7 +43,6 @@ Method Query(sqlQuery) As %List [ Language = python ]
     formatted_data = ','+','.join(str(item) for item in list)
     return formatted_data
 }
-
 
 Method EmbeddingPy(input As %String) [ Language = python ]
 {
