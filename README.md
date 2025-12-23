@@ -5,7 +5,7 @@
  4. Create and run containers: `docker-compose up -d` (macOS: `docker-compose -f docker-compose-arm.yaml up -d`)
  5. Open IRIS managementportal: http://localhost:52773/csp/sys/UtilHome.csp
  6. Open SwaggerUI (APIs): http://localhost:52773/swagger-ui/index.html
- 7. Open Streamlit (Chat interface): http://localhost:8051/
+ 7. Open Streamlit (Chat interface): http://localhost:8501/
 
 RAG
  Submit PDF or text content to vectorize and use as context:
