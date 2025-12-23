@@ -7,9 +7,7 @@ Property SourceId As %Integer;
 
 Property Text As %String(MAXLEN = 2048);
 
-Property CleanText As %String(MAXLEN = 2048);
-
-Property Embedding As %Library.Embedding(MODEL = "multilingual-e5-large-instruct", SOURCE = "CleanText");
+Property Embedding As %Library.Embedding(MODEL = "multilingual-e5-large-instruct", SOURCE = "Text");
 
 Index idxDataSourceId On DataSourceId;
 
@@ -29,9 +27,6 @@ Storage Default
 <Value>Text</Value>
 </Value>
 <Value name="5">
-<Value>CleanText</Value>
-</Value>
-<Value name="6">
 <Value>Embedding</Value>
 </Value>
 </Data>

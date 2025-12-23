@@ -2,9 +2,12 @@ Class Demo.Service.StreamlitService Extends Ens.BusinessService
 {
 
 /// Configuration item(s) to which to send file stream messages
-Property TargetConfigName As %String(MAXLEN = 1000);
+Property TargetConfigNamePrompts As %String(MAXLEN = 1000) [ InitialExpression = "LLM Process Local" ];
 
-Parameter SETTINGS = "TargetConfigName:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId}";
+/// Configuration item(s) to which to send file stream messages
+Property TargetConfigNameInsert As %String(MAXLEN = 1000) [ InitialExpression = "Load Data" ];
+
+Parameter SETTINGS = "TargetConfigNamePrompts:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId},TargetConfigNameInsert:Basic:selector?context={Ens.ContextSearch/ProductionItems?targets=1&productionName=@productionId}";
 
 /// @apiPub[path="Ask"]
 Method PromptAsk(pPrompt As %String) As %String [ WebMethod ]
@@ -12,7 +15,7 @@ Method PromptAsk(pPrompt As %String) As %String [ WebMethod ]
     Set tRequest = ##class(Demo.GenerateRequest).%New()
     Set tRequest.Prompt = $ZCONVERT(pPrompt,"I","UTF8")
 
-    Set tSC = ..SendRequestSync(..TargetConfigName, tRequest, .tResponse)
+    Set tSC = ..SendRequestSync(..TargetConfigNamePrompts, tRequest, .tResponse)
 
     Return tResponse.Response
 }
@@ -22,7 +25,7 @@ Method Ask(pPrompt As %String) As %String
     Set tRequest = ##class(Demo.GenerateRequest).%New()
     Set tRequest.Prompt = pPrompt
 
-    Set tSC = ..SendRequestSync(..TargetConfigName, tRequest, .tResponse)
+    Set tSC = ..SendRequestSync(..TargetConfigNamePrompts, tRequest, .tResponse)
 
     Return tResponse.Response
 }
@@ -38,9 +41,9 @@ Method SubmitContent(text As %Stream.GlobalCharacter) As Demo.PDFRecord [ WebMet
     While text.AtEnd'=1 {
         Do tStream.Write($ZCONVERT(text.Read(),"I","UTF8"))
     }
-    Set tRequest = ##class(Demo.Operations.Embedding.EmbeddingRequest).%New()
+    Set tRequest = ##class(Demo.Operations.LoadData.Request).%New()
     Set tRequest.Pdf = ..SaveContent(tStream)
-    Set tSC = ..SendRequestAsync("Embedding Operation", tRequest)
+    Set tSC = ..SendRequestAsync(..TargetConfigNameInsert, tRequest)
     Quit ##Class(Demo.PDFRecord).%OpenId(tRequest.Pdf)
 }
 
@@ -72,11 +75,9 @@ Method SubmitPDF(payload As %Stream.GlobalBinary) As %Stream.GlobalCharacter [ W
     Set pdfResponse = ##class(Demo.Utils).GetTextFromPdf(tBase64)
     Set resp = ##class(%Stream.GlobalCharacter).%New()
     Do resp.Write(pdfResponse)
-
-    Set tRequest = ##class(Demo.Operations.Embedding.EmbeddingRequest).%New()
+    Set tRequest = ##class(Demo.Operations.LoadData.Request).%New()
     Set tRequest.Pdf = ..SaveContent(resp)
-    Set tSC = ..SendRequestAsync("Embedding Operation", tRequest)
-
+    Set tSC = ..SendRequestAsync(..TargetConfigNameInsert, tRequest)
     Quit resp
 }
 
@@ -84,7 +85,7 @@ Method SubmitPDF(payload As %Stream.GlobalBinary) As %Stream.GlobalCharacter [ W
 ClassMethod OnGetConnections(Output pArray As %String, pItem As Ens.Config.Item)
 {
     Do ##super(.pArray,pItem)
-    If pItem.GetModifiedSetting("TargetConfigName",.tValue) {
+    If pItem.GetModifiedSetting("TargetConfigNamePrompts",.tValue) {
         For i=1:1:$LENGTH(tValue,",") { 
             Set tOne=$ZSTRIP($PIECE(tValue,",",i),"<>W")  
             Continue:""=tOne  Set pArray(tOne)="" }

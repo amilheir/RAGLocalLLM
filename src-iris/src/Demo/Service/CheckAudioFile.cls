@@ -33,7 +33,7 @@ Method OnProcessInput(pInput As %Stream.Object, Output pOutput As %RegisteredObj
     $$$TRACE(Response)
     Set resp = ##class(%Stream.GlobalCharacter).%New()
     Do resp.Write(Response)
-    Set tRequest = ##class(Demo.Operations.Embedding.EmbeddingRequest).%New()
+    Set tRequest = ##class(Demo.Operations.Embedding.Request).%New()
     Set tRequest.Pdf = ##class(Demo.Service.StreamlitService).SaveContent(resp)
     Set tSC = ..SendRequestAsync("Embedding Operation", tRequest)
     Quit tSC

@@ -1,7 +1,7 @@
 Class Demo.Utils Extends %RegisteredObject
 {
 
-ClassMethod GetChunks(pText As %SYS.Python, pChunkSize As %Integer, pChunkOverlap As %Integer) As %SYS.Python [ Language = python ]
+ClassMethod GetChunks(pText As %SYS.Python, pChunkSize As %Integer, pChunkOverlap As %Integer) As %String [ Language = python ]
 {
     from langchain.text_splitter import RecursiveCharacterTextSplitter
 
@@ -11,7 +11,7 @@ ClassMethod GetChunks(pText As %SYS.Python, pChunkSize As %Integer, pChunkOverla
     )
     docs = text_splitter.split_text(pText)
 
-    return docs
+    return str(docs)
 }
 
 ClassMethod GetTextFromPdf(pdfBinary) As %SYS.Python [ Language = python ]
@@ -51,8 +51,7 @@ ClassMethod GetCleanTxt(text) As %String [ Language = python ]
 {
     
     import re
-    clean_text = re.sub('\n', ' ', text)  # Remove new lines
-    clean_text = re.sub(' +', ' ', clean_text)  # Remove extra spaces
+    clean_text = re.sub(' +', ' ', text)  # Remove extra spaces
     clean_text = re.sub(r"[^a-zA-Z0-9.,;:?!\/\-% áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇ]", "", clean_text)
     return clean_text
 }

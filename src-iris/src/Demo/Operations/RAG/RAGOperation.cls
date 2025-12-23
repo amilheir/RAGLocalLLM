@@ -3,7 +3,7 @@ Class Demo.Operations.RAG.RAGOperation Extends Ens.BusinessOperation
 
 Parameter SETTINGS = "NumberOfRetrivals:RAG";
 
-Property NumberOfRetrivals As %String [ InitialExpression = "3" ];
+Property NumberOfRetrivals As %String [ InitialExpression = "5" ];
 
 Parameter INVOCATION = "Queue";
 
@@ -14,18 +14,22 @@ Method OnRAG(pRequest As Demo.GenerateRequest, pResponse As Demo.Operations.RAG.
     Set tSc = $$$OK
 
     Try {
-      Set tBuiltins = ##class(%SYS.Python).Builtins()
-      Set tAsk = pRequest.Prompt
-      Set tPrompt = ##class(Demo.Utils).GetCleanTxt(tAsk)
-      Set tStatement = ##class(%SQL.Statement).%New()
-      Set tEmbdding= ..EmbeddingPy(tPrompt)
-      Set tcolumn = "Embedding"
-      Set tSql = "SELECT TOP "_..NumberOfRetrivals_" ID FROM Demo.RecordEmbeddings ORDER BY VECTOR_DOT_PRODUCT("_tcolumn_" , TO_VECTOR('"_tEmbdding_"', FLOAT)) DESC"
-      $$$TRACE(tSql)
-      Set rList = ..Query(tSql)
-      Set pResponse = ##class(Demo.Operations.RAG.RAGResponse).%New()
-      Set pResponse.DocIds = rList
-      Set pResponse.DocCount = ..NumberOfRetrivals
+        Set tBuiltins = ##class(%SYS.Python).Builtins()
+        Set tAsk = pRequest.Prompt
+        Set tPrompt = ##class(Demo.Utils).GetCleanTxt(tAsk)
+        Set EmbRequest = ##class(Demo.Operations.Embedding.Request).%New()
+        Set EmbRequest.Chunks = "['"_tPrompt_"']"
+        ///$$$TRACE(EmbRequest.Chunks)
+        Set EmbResponse = ##class(Demo.Operations.Embedding.Response).%New()
+        Set sc = ..SendRequestSync("Embedding Operation", EmbRequest, .EmbResponse)
+        Set tEmbdding= ..EmbeddingPy(EmbResponse.Vectors)
+        Set tcolumn = "Embedding"
+        Set tSql = "SELECT TOP "_..NumberOfRetrivals_" ID FROM Demo.RecordEmbeddings ORDER BY VECTOR_DOT_PRODUCT("_tcolumn_" , TO_VECTOR('"_tEmbdding_"', FLOAT)) DESC"
+        $$$TRACE(tSql)
+        Set rList = ..Query(tSql)
+        Set pResponse = ##class(Demo.Operations.RAG.RAGResponse).%New()
+        Set pResponse.DocIds = rList
+        Set pResponse.DocCount = ..NumberOfRetrivals
     } Catch ex {
         Set tSc = ex.AsStatus()
     }
@@ -42,31 +46,20 @@ Method Query(sqlQuery) As %List [ Language = python ]
     return formatted_data
 }
 
-Method EmbeddingPy(input As %String) [ Language = python ]
+Method EmbeddingPy(Embeddings As %Stream.GlobalCharacter) As %String [ Language = python ]
 {
-    # Generate embeddings
-    embeddings = self.Model.encode([input])[0]
-    return str(embeddings.tolist())
-}
+    import iris
 
-Method OnInit() As %Status
-{
-    #dim sc As %Status = $$$OK
-    try {
-        do ..PyInit()
-    } catch ex {
-        set sc = ex.AsStatus()
-    }
-    quit sc
-}
+    def stream_to_string(stream)-> str:
+        string = ""
+        stream.Rewind()
+        while not stream.AtEnd:
+            string += stream.Read(1024)
+        return string
 
-Method PyInit() [ Language = python ]
-{
-    from sentence_transformers import SentenceTransformer
-    import torch
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    self.Model = SentenceTransformer("intfloat/multilingual-e5-large-instruct", cache_folder ="/usr/irissys/iriscache/hfcache", trust_remote_code=True, device=device)
+    embeddings_str = stream_to_string(Embeddings)
+    # self.Trace(embeddings_str)
+    return embeddings_str[1:-1]
 }
 
 ClassMethod LogInfo(Msg As %String)
